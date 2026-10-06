@@ -21,7 +21,7 @@ public Plugin myinfo =
 	name = "Custom Item Attributes",
 	author = "Officer Spy",
 	description = "Checks for extra attributes that were injected by another mod.",
-	version = "0.0.0",
+	version = "0.0.1",
 	url = ""
 };
 
@@ -51,6 +51,11 @@ public void OnPluginStart()
 	{
 		ThrowError("Failed to load gamedata file \"tf2.customattributes.txt\"!");
 	}
+}
+
+public void OnMapStart()
+{
+	OSLib_AddStringToEffectDispatchTable("ParticleEffect");
 }
 
 public void OnConfigsExecuted()
