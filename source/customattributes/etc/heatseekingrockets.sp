@@ -208,9 +208,9 @@ bool PerformCustomPhysics(int ent, float pNewPosition[3], float pNewVelocity[3],
 				}
 				
 				float delta[3];
-				float vecPlayerWSC[3]; CBaseEntity(i).WorldSpaceCenter(vecPlayerWSC);
-				float vecProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vecProjWSC);
-				SubtractVectors(vecPlayerWSC, vecProjWSC, delta);
+				float vPlayerWSC[3]; CBaseEntity(i).WorldSpaceCenter(vPlayerWSC);
+				float vProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vProjWSC);
+				SubtractVectors(vPlayerWSC, vProjWSC, delta);
 				
 				float mindotproduct = g_arrHoming[ent].min_dot_product;
 				float dotproduct = GetVectorDotProduct(Vector_Normalized(delta), Vector_Normalized(pNewVelocity));
@@ -224,7 +224,7 @@ bool PerformCustomPhysics(int ent, float pNewPosition[3], float pNewVelocity[3],
 					
 					if (!noclip)
 					{
-						TR_TraceRayFilter(vecPlayerWSC, vecProjWSC, MASK_SOLID_BRUSHONLY, RayType_EndPoint, TraceFilter_HomingRockets, i);
+						TR_TraceRayFilter(vPlayerWSC, vProjWSC, MASK_SOLID_BRUSHONLY, RayType_EndPoint, TraceFilter_HomingRockets, i);
 					}
 					
 					if (noclip || !TR_DidHit() || TR_GetEntityIndex() == ent)
@@ -236,11 +236,11 @@ bool PerformCustomPhysics(int ent, float pNewPosition[3], float pNewVelocity[3],
 			}
 			if (target_player != -1)
 			{
-				float vecPlayerWSC[3]; CBaseEntity(target_player).WorldSpaceCenter(vecPlayerWSC);
-				target_vec = vecPlayerWSC;
+				float vPlayerWSC[3]; CBaseEntity(target_player).WorldSpaceCenter(vPlayerWSC);
+				target_vec = vPlayerWSC;
 				
-				float vecProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vecProjWSC);
-				float target_distance = GetVectorDistance(vecProjWSC, vecPlayerWSC);
+				float vProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vProjWSC);
+				float target_distance = GetVectorDistance(vProjWSC, vPlayerWSC);
 				
 				if (g_arrHoming[ent].predict_target_speed)
 				{
@@ -252,12 +252,12 @@ bool PerformCustomPhysics(int ent, float pNewPosition[3], float pNewVelocity[3],
 			}
 		}
 		
-		if (!Vector_IsZero(target_vec, 0.0))
+		if (!Vector_IsZero(target_vec))
 		{
 			float angToTarget[3];
-			float vecProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vecProjWSC);
-			float vecSubtracted[3]; SubtractVectors(target_vec, vecProjWSC, vecSubtracted);
-			GetVectorAngles(vecSubtracted, angToTarget);
+			float vProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vProjWSC);
+			float vSubtracted[3]; SubtractVectors(target_vec, vProjWSC, vSubtracted);
+			GetVectorAngles(vSubtracted, angToTarget);
 			
 			g_arrHoming[ent].homed_in = true;
 			g_arrHoming[ent].homed_in_angle = angToTarget;
@@ -284,10 +284,10 @@ bool PerformCustomPhysics(int ent, float pNewPosition[3], float pNewVelocity[3],
 	{
 		int owner = BaseEntity_GetOwnerEntity(ent);
 		
-		float vecProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vecProjWSC);
-		float vecOwnerWSC[3]; CBaseEntity(owner).WorldSpaceCenter(vecOwnerWSC);
-		float vecSubtracted[3]; SubtractVectors(vecProjWSC, vecOwnerWSC, vecSubtracted);
-		GetVectorAngles(vecSubtracted, pNewAngles);
+		float vProjWSC[3]; CBaseEntity(ent).WorldSpaceCenter(vProjWSC);
+		float vOwnerWSC[3]; CBaseEntity(owner).WorldSpaceCenter(vOwnerWSC);
+		float vSubtracted[3]; SubtractVectors(vProjWSC, vOwnerWSC, vSubtracted);
+		GetVectorAngles(vSubtracted, pNewAngles);
 	}
 	
 	float vecOrientation[3];
@@ -297,9 +297,9 @@ bool PerformCustomPhysics(int ent, float pNewPosition[3], float pNewVelocity[3],
 	vec[0] = 0.0;
 	vec[1] = 0.0;
 	vec[2] = -g_arrHoming[ent].gravity * time;
-	pNewVelocity[0] = vecOrientation[0] * speed_calculated + vec[0];
-	pNewVelocity[1] = vecOrientation[1] * speed_calculated + vec[1];
-	pNewVelocity[2] = vecOrientation[2] * speed_calculated + vec[2];
+	pNewVelocity[0] = vecOrientation[0] * (speed_calculated) + vec[0];
+	pNewVelocity[1] = vecOrientation[1] * (speed_calculated) + vec[1];
+	pNewVelocity[2] = vecOrientation[2] * (speed_calculated) + vec[2];
 	
 	pNewPosition[0] += (pNewVelocity[0] * GetGameFrameTime());
 	pNewPosition[1] += (pNewVelocity[1] * GetGameFrameTime());
