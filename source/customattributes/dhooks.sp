@@ -25,6 +25,7 @@ static MRESReturn DHookCallback_PerformCustomPhysics_Pre(int pThis, DHookParam h
 {
 	float vNewPosition[3], vNewVelocity[3], vNewAngles[3], vNewAngVelocity[3];
 	
+	//We need to know what the current values are first
 	hParams.GetVector(1, vNewPosition);
 	hParams.GetVector(2, vNewVelocity);
 	hParams.GetVector(3, vNewAngles);
@@ -32,6 +33,7 @@ static MRESReturn DHookCallback_PerformCustomPhysics_Pre(int pThis, DHookParam h
 	
 	if (PerformCustomPhysics(pThis, vNewPosition, vNewVelocity, vNewAngles, vNewAngVelocity))
 	{
+		//Set to our modified values
 		hParams.SetVector(1, vNewPosition);
 		hParams.SetVector(2, vNewVelocity);
 		hParams.SetVector(3, vNewAngles);
